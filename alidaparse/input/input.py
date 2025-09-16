@@ -1,6 +1,51 @@
 import argparse
 from dataclasses import dataclass
-from typing import Union, List
+from typing import Union, List, Any
+
+
+@dataclass(frozen=True)
+class InParam:
+    param_value: str
+    param_name: str
+
+    def __init__(self, *args, **kwargs):
+        # prevent direct construction
+        raise RuntimeError("Use InParam.from_cli() to create an instance")
+
+    @classmethod
+    def from_cli(
+        cls, name: str, param_type: str, required: bool, n: int = 1
+    ) -> Union[List["InParam"], "InParam"]:
+        parser = argparse.ArgumentParser()
+        if n != 1:
+            objs = []
+            for i in range(1, n + 1):
+                parser.add_argument(
+                    f"--{name}-{i}", dest=f"{name}_{i}", required=required, type=str
+                )
+            args = parser.parse_args()
+            for i in range(1, n + 1):
+                objs.append(
+                    cls.__create_instance(
+                        f"{name}_{i}",
+                        getattr(args, f"{name}_{i}"),
+                    )
+                )
+            return objs
+        else:
+            parser.add_argument(
+                f"--{name}", dest=f"{name}", required=required, type=str
+            )
+            args = parser.parse_args()
+            return cls.__create_instance(f"{name}", getattr(args, f"{name}"))
+
+    @staticmethod
+    def __create_instance(param_name, param_value):
+        """Bypass __init__ and set attributes for a frozen dataclass."""
+        obj = object.__new__(InParam)
+        object.__setattr__(obj, "param_name", param_name)
+        object.__setattr__(obj, "param_value", param_value)
+        return obj
 
 
 @dataclass(frozen=True)
