@@ -52,7 +52,7 @@ class OutDataset:
                     type=str,
                     required=True,
                 )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             for i in range(1, n + 1):
                 objs.append(
                     cls.__create_instance(
@@ -92,7 +92,7 @@ class OutDataset:
                 type=str,
                 required=True,
             )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             return cls.__create_instance(
                 dataset=args.output_dataset,
                 bucket=args.output_minio_bucket,
@@ -162,7 +162,7 @@ class OutModel:
                     type=str,
                     required=True,
                 )
-            args = parser.parse_args()
+            args = parser.parse_known_args()
             for i in range(1, n + 1):
                 objs.append(
                     cls.__create_instance(
@@ -202,7 +202,7 @@ class OutModel:
                 type=str,
                 required=True,
             )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             return cls.__create_instance(
                 model=args.output_model,
                 bucket=args.output_model_minio_bucket,

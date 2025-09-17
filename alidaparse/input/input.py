@@ -1,6 +1,6 @@
 import argparse
 from dataclasses import dataclass
-from typing import Union, List, Any
+from typing import Union, List, Callable
 
 
 @dataclass(frozen=True)
@@ -14,21 +14,21 @@ class InParam:
 
     @classmethod
     def from_cli(
-        cls, name: str, required: bool, n: int = 1
+        cls, name: str, required: bool, param_type: Callable, n: int = 1
     ) -> Union[List["InParam"], "InParam"]:
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(add_help=False)
         if n != 1:
             objs = []
             for i in range(1, n + 1):
                 parser.add_argument(
                     f"--{name}-{i}", dest=f"{name}_{i}", required=required, type=str
                 )
-            args = parser.parse_args()
+            args = parser.parse_known_args()
             for i in range(1, n + 1):
                 objs.append(
                     cls.__create_instance(
                         f"{name}_{i}",
-                        getattr(args, f"{name}_{i}"),
+                        param_type(getattr(args, f"{name}_{i}")),
                     )
                 )
             return objs
@@ -36,8 +36,10 @@ class InParam:
             parser.add_argument(
                 f"--{name}", dest=f"{name}", required=required, type=str
             )
-            args = parser.parse_args()
-            return cls.__create_instance(f"{name}", getattr(args, f"{name}"))
+            args, _ = parser.parse_known_args()
+            return cls.__create_instance(
+                f"{name}", param_type(getattr(args, f"{name}"))
+            )
 
     @staticmethod
     def __create_instance(param_name, param_value):
@@ -97,7 +99,7 @@ class InDataset:
                     type=str,
                     required=True,
                 )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             for i in range(1, n + 1):
                 objs.append(
                     cls.__create_instance(
@@ -137,13 +139,13 @@ class InDataset:
                 type=str,
                 required=True,
             )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             return cls.__create_instance(
                 dataset=args.input_dataset,
-                bucket=args.input_dataset_minio_bucket,
-                url=args.input_dataset_minio_url,
-                access_key=args.input_dataset_access_key,
-                secret_key=args.input_dataset_secret_key,
+                bucket=args.input_minio_bucket,
+                url=args.input_minio_url,
+                access_key=args.input_access_key,
+                secret_key=args.input_secret_key,
             )
 
     @staticmethod
@@ -207,7 +209,7 @@ class InModel:
                     type=str,
                     required=True,
                 )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             for i in range(1, n + 1):
                 objs.append(
                     cls.__create_instance(
@@ -247,7 +249,7 @@ class InModel:
                 type=str,
                 required=True,
             )
-            args = parser.parse_args()
+            args, _ = parser.parse_known_args()
             return cls.__create_instance(
                 model=args.input_model,
                 bucket=args.input_model_minio_bucket,
