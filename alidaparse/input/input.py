@@ -1,11 +1,11 @@
 import argparse
 from dataclasses import dataclass
-from typing import Union, List, Callable
+from typing import Union, List, Callable, Any
 
 
 @dataclass(frozen=True)
 class InParam:
-    param_value: str
+    param_value: bool | str | int | float
     param_name: str
 
     def __init__(self, *args, **kwargs):
