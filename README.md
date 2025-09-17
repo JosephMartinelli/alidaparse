@@ -1,7 +1,6 @@
 # 📦 alidaparse
 
-`alidaparse` is a Python package for generating arguments needed for ALIDA'services that creates a
-wrapper for the argparse module.
+`alidaparse` is a Python package for generating CLI arguments required by ALIDA's services.
 Instead of creating each time an `arguments.py`, a simple import of `alidaparse` will do the trick!
 
 ---
@@ -44,22 +43,8 @@ parser.add_argument(
 )
 ...
 ```
-Those arguments need to be repeated for each input/ouput dataset models, that will quickly 
-lead to:
-```python
-import argparse
+Those arguments need to be repeated for each input/ouput dataset and model that the service needs to use.
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--input-dataset-1", dest="input_dataset_1", type=str, required=True)
-parser.add_argument(
-    "--input-dataset-1.minio_bucket", dest="input_dataset_1_minio_bucket", type=str, required=True
-)
-parser.add_argument("--input-dataset-2", dest="input_dataset_2", type=str, required=True)
-parser.add_argument(
-    "--input-dataset-2.minio_bucket", dest="input_dataset_2_minio_bucket", type=str, required=True
-)
-...
-```
 With `alidaparse.py` you simply import a class that will automatically 
 generate those arguments for you:
 ```python
@@ -80,7 +65,7 @@ usage: main.py [-h] --input-dataset INPUT_DATASET
 main.py: error: the following arguments are required: --input-dataset, --input-dataset.minio_bucket, --input-dataset.minIO_URL, --input-dataset.minIO_ACCESS_KEY, --input-dataset.minIO_SECRET_KEY
 ```  
 ---
-You can also declare multiple arguments ba passing an integer to `from_cli(n)`
+You can also declare multiple arguments by passing an integer to `from_cli(n)`
 ```python
 # contents of main.py
 from alidaparse.input import InDataset
@@ -115,6 +100,10 @@ alidaparse/
 ├── output/
 │   ├── __init__.py
 │   └── output.py  # Contains OutDataset,OutModel class
+├── test/
+│   ├── conftest.py # Needed for pytest
+│   ├── test_input.py
+│   └── test_output.py
 ├── __init__.py
 ├── setup.py
 ├── pyproject.toml
@@ -125,12 +114,29 @@ alidaparse/
 
 ## 🛠 Development
 
-To install dependencies and run tests:
+To install dependencies:
 
 ```bash
 pip install -r requirements.txt
-pytest
-```
+```  
+
+[//]: # (To run tests with arguments to pass to the services, you can invoke pytest)
+
+[//]: # (by passing a `--vars` value that will be passed to the argument of the test)
+
+[//]: # (functions:)
+
+[//]: # (```bash)
+
+[//]: # (cd alidaparse/test)
+
+[//]: # (pytest --vars custom-param1=custom-value1,custom-param2=custom-value2 ...)
+
+[//]: # (# or)
+
+[//]: # (pytest --vars custom-param=custom-value --vars custom-param2=custom-value2)
+
+[//]: # (```  )
 
 ---
 

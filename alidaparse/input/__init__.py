@@ -1,1 +1,1 @@
-from .input import InDataset, InModel
+from .input import InDataset, InModel, InParam

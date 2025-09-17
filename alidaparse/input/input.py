@@ -14,7 +14,7 @@ class InParam:
 
     @classmethod
     def from_cli(
-        cls, name: str, param_type: str, required: bool, n: int = 1
+        cls, name: str, required: bool, n: int = 1
     ) -> Union[List["InParam"], "InParam"]:
         parser = argparse.ArgumentParser()
         if n != 1:
