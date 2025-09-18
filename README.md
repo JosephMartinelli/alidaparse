@@ -89,7 +89,7 @@ main.py: error: the following arguments are required: --input-dataset-1, --input
 --input-dataset-2.minIO_SECRET_KEY
 ```
 `alidaparse.py` has classes for dealing with input/output datasets, models and custom params. Simply
-import `from alidaparse.input import InDataset,InModel,InParam` 
+import `from alidaparse.input import InDataset,InModel,InParam`
 ## 📁 Project Structure
 
 ```
@@ -100,15 +100,19 @@ alidaparse/
 ├── output/
 │   ├── __init__.py
 │   └── output.py  # Contains OutDataset,OutModel class
-├── test/
-│   ├── conftest.py # Needed for pytest
-│   ├── test_input.py
-│   └── test_output.py
 ├── __init__.py
 ├── setup.py
 ├── pyproject.toml
 └── README.md
 ```
+
+[//]: # (├── test/)
+
+[//]: # (│   ├── conftest.py # Needed for pytest)
+
+[//]: # (│   ├── test_input.py)
+
+[//]: # (│   └── test_output.py)
 
 ---
 
