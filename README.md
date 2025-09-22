@@ -34,6 +34,7 @@ pip install .
 Usually a service of the ALIDA's platform needs to declare an `arguments.py` file in which it defines
 a series of an arguments it needs in input to work. This file looks something like this:
 ```python
+# contents of arguments.py
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -45,13 +46,13 @@ parser.add_argument(
 ```
 Those arguments need to be repeated for each input/ouput dataset and model that the service needs to use.
 
-With `alidaparse.py` you simply import a class that will automatically 
+With `alidaparse.py` you simply import a factory class that will automatically 
 generate those arguments for you:
 ```python
 # contents of main.py
-from alidaparse.input import InDataset
+from alidaparse.input import InDatasetFactory
 
-dataset = InDataset.from_cli()
+dataset = InDatasetFactory.from_cli()
 ```  
 And running `main.py` will have this effect:
 ```python
@@ -68,9 +69,9 @@ main.py: error: the following arguments are required: --input-dataset, --input-d
 You can also declare multiple arguments by passing an integer to `from_cli(n)`
 ```python
 # contents of main.py
-from alidaparse.input import InDataset
+from alidaparse.input import InDatasetFactory
 
-dataset = InDataset.from_cli(n=2)
+dataset = InDatasetFactory.from_cli(n=2)
 ```  
 ```python
 usage: main.py [-h] --input-dataset-1 INPUT_DATASET_1
@@ -96,10 +97,13 @@ import `from alidaparse.input import InDataset,InModel,InParam`
 alidaparse/
 ├── input/
 │   ├── __init__.py
-│   └── input.py  # Contains InDataset,InModel,InParam class
+│   └── InDataset.py
+│   └── InModel.py
+│   └── InParam.py
 ├── output/
 │   ├── __init__.py
-│   └── output.py  # Contains OutDataset,OutModel class
+│   └── OutDataset.py
+│   └── OutModel.py
 ├── __init__.py
 ├── setup.py
 ├── pyproject.toml
