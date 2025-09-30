@@ -1,6 +1,6 @@
 import argparse
 from dataclasses import dataclass
-from typing import Union, List
+from typing import Union, List, Sequence
 
 
 @dataclass(frozen=True)
@@ -14,7 +14,10 @@ class OutDataset:
 
 class OutDatasetFactory:
     @staticmethod
-    def from_cli(n: int = 1) -> Union[List["OutDataset"], "OutDataset"]:
+    def from_cli(
+        n: int = 1,
+        argv: Sequence[str] | None = None,
+    ) -> Union[List["OutDataset"], "OutDataset"]:
         """Register arguments, parse CLI, and return immutable InDataset."""
         parser = argparse.ArgumentParser()
         if n != 1:
@@ -50,7 +53,7 @@ class OutDatasetFactory:
                     type=str,
                     required=True,
                 )
-            args, _ = parser.parse_known_args()
+            args, _ = parser.parse_known_args(argv)
             for i in range(1, n + 1):
                 objs.append(
                     OutDataset(
@@ -90,7 +93,7 @@ class OutDatasetFactory:
                 type=str,
                 required=True,
             )
-            args, _ = parser.parse_known_args()
+            args, _ = parser.parse_known_args(argv)
             return OutDataset(
                 dataset=args.output_dataset,
                 minio_bucket=args.output_minio_bucket,

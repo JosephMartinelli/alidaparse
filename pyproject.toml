@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alidaparse"
-version = "0.1.4"
+version = "0.2.0"
 description = "A parsing module for ALIDA's services"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "kafka-python>=2.2.15",
+    "minio>=7.2.16",
+]
 
 [tool.bumpversion]
 current_version = "0.1.1"
