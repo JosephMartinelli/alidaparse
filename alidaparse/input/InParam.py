@@ -1,6 +1,8 @@
 import argparse
 from dataclasses import dataclass
-from typing import Callable, Union, List, Sequence
+from typing import Union, List, Sequence, TypeAlias
+
+T: TypeAlias = type[str] | type[bool] | type[int] | type[float]
 
 
 @dataclass(frozen=True)
@@ -9,16 +11,22 @@ class InParam:
     param_name: str
 
 
+def boolean_string(s: str) -> bool:
+    return s.lower() in {"true", "yes", "y"}
+
+
 class InParamFactory:
 
     @staticmethod
     def from_cli(
         name: str,
         required: bool,
-        param_type: Callable,
+        param_type: T,
         n: int = 1,
         argv: Sequence[str] | None = None,
     ) -> Union[List["InParam"], "InParam"]:
+        if param_type is bool:
+            param_type = boolean_string
         parser = argparse.ArgumentParser(add_help=False)
         if n != 1:
             objs = []
