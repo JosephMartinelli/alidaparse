@@ -53,6 +53,4 @@ class InParamFactory:
                 f"--{name}", dest=f"{name}", required=required, type=param_type
             )
             args, _ = parser.parse_known_args(argv)
-            return InParam(
-                param_name=f"{name}", param_value=param_type(getattr(args, f"{name}"))
-            )
+            return InParam(param_name=f"{name}", param_value=getattr(args, f"{name}"))
